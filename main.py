@@ -6,36 +6,45 @@ import os
 
 
 def get_excel_file_path():
-    Tk().withdraw()  # ルートウィンドウを表示せずにファイル選択ダイアログを開く
-    file_path = askopenfilename()  # ファイル選択ダイアログを表示
-    if not file_path:
+    """
+    Excelファイルを選択するためのダイアログを表示し、選択されたファイルのパスを返す関数。
+    """
+    Tk().withdraw()  # ルートウィンドウを表示しないように設定
+    file_path = askopenfilename()  # ファイル選択ダイアログを表示し、選択されたファイルのパスを取得
+    if not file_path:  # ファイルが選択されなかった場合
         print("ファイルが選択されませんでした。")
-    return file_path
+    return file_path  # 選択されたファイルのパスを返す
 
 
 def create_new_excel_with_sheets():
-    original_excel_file_path = get_excel_file_path()
-    if not original_excel_file_path:
+    """
+    Excelファイルを読み込み、特定のシートの値を基に新しいExcelファイルを作成する関数。
+    """
+    original_excel_file_path = get_excel_file_path()  # 元のExcelファイルのパスを取得
+    if not original_excel_file_path:  # ファイルが選択されなかった場合は処理を終了
         return
 
-    original_workbook = openpyxl.load_workbook(original_excel_file_path, data_only=True)
-    original_sheet = original_workbook["試験項目"]
+    original_workbook = openpyxl.load_workbook(original_excel_file_path, data_only=True)  # 元のExcelファイルを読み込む（数式ではなく値を取得）
+    original_sheet = original_workbook["試験項目"]  # "試験項目"シートを取得
 
-    new_workbook = Workbook()
+    new_workbook = Workbook()  # 新しいExcelブックを作成
     new_workbook.remove(new_workbook.active)  # デフォルトで作成されるシートを削除
 
-    for row_num in range(8, original_sheet.max_row + 1):
-        cell_value = original_sheet.cell(row=row_num, column=1).value
-        if cell_value is None:
+    for row_num in range(8, original_sheet.max_row + 1):  # 8行目から最終行までループ
+        cell_value = original_sheet.cell(row=row_num, column=1).value  # 1列目の値を取得
+        if cell_value is None:  # 値が空の場合はループを抜ける
             break
-        new_sheet_title = f"No.{cell_value}"
-        new_workbook.create_sheet(title=new_sheet_title)
+        new_sheet_title = f"{cell_value}"  # 新しいシートのタイトルを設定
+        new_workbook.create_sheet(title=new_sheet_title)  # 新しいシートを作成
 
-    original_file_name = os.path.basename(original_excel_file_path)
-    new_file_name = f"エビ_{original_file_name}"
-    new_workbook.save(new_file_name)
-    print(f"新しいExcelファイル '{new_file_name}' を作成しました。")
+    original_file_name = os.path.basename(original_excel_file_path)  # 元のファイル名を取得
+    original_dir_path = os.path.dirname(original_excel_file_path)  # 元のファイルのディレクトリパスを取得
+    new_file_name = f"エビ_{original_file_name}"  # 新しいファイル名を作成
+
+    new_file_path = os.path.join(original_dir_path, new_file_name)  # 新しいファイルのパスを作成
+    new_workbook.save(new_file_path)  # 新しいExcelファイルを保存
+    print(f"新しいExcelファイル '{new_file_name}' を作成しました。")  # 保存完了メッセージを表示
 
 
-if __name__ == "__main__":
-    create_new_excel_with_sheets()
+if __name__ == "__main__":  # このスクリプトが直接実行された場合のみ以下の処理を実行
+    create_new_excel_with_sheets()  # メインの処理を実行
