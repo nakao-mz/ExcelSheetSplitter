@@ -1,3 +1,5 @@
+import tkinter.messagebox
+
 import openpyxl
 from openpyxl import Workbook
 from tkinter import Tk
@@ -43,7 +45,7 @@ def create_new_excel_with_sheets():
 
     new_file_path = os.path.join(original_dir_path, new_file_name)  # 新しいファイルのパスを作成
     new_workbook.save(new_file_path)  # 新しいExcelファイルを保存
-    print(f"新しいExcelファイル '{new_file_name}' を作成しました。")  # 保存完了メッセージを表示
+    tkinter.messagebox.showinfo("完了", f"新しいExcelファイルを作成しました。\n{new_file_path}")  # 完了メッセージを表示
 
 
 if __name__ == "__main__":  # このスクリプトが直接実行された場合のみ以下の処理を実行
