@@ -4,6 +4,7 @@ from openpyxl import Workbook
 from tkinter import Tk, Label, Button, Radiobutton, StringVar
 from tkinter.filedialog import askopenfilename
 import os
+import re  # Import the re module for regular expressions
 
 
 def get_excel_file_path():
@@ -29,6 +30,16 @@ def create_evidence_folder(directory_path):
             tkinter.messagebox.showerror("エラー", f"エビデンスフォルダを作成できませんでした。\n{e}")
             raise
     return evidence_folder_path
+
+
+def sanitize_filename(filename):
+    """
+    ファイル名から特殊文字を除去または置換する関数。
+    """
+    sanitized_filename = re.sub(r'[\\/:*?"<>|]', '', filename)
+    if sanitized_filename != filename:
+        print(f"警告: ファイル名に特殊文字が含まれていたため、修正されました。元のファイル名: {filename}, 修正後のファイル名: {sanitized_filename}")
+    return sanitized_filename
 
 
 def create_new_excel_with_sheets(mode):
@@ -89,7 +100,8 @@ def create_new_excel_with_sheets(mode):
         for test_item, test_numbers in test_item_dict.items():
             start_number = test_numbers[0]
             end_number = test_numbers[-1]
-            new_file_name = f"No.{start_number}~{end_number}_エビデンス_{test_item}.xlsx"
+            sanitized_test_item = sanitize_filename(test_item)  # サニタイズされた試験項目名を使用
+            new_file_name = f"No.{start_number}~{end_number}_エビデンス_{sanitized_test_item}.xlsx"
             new_file_path = os.path.join(evidence_folder_path, new_file_name)
 
             new_workbook = Workbook()
