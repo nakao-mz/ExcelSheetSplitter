@@ -88,7 +88,9 @@ def create_new_excel_with_sheets(mode):
 
         tkinter.messagebox.showinfo("完了", "新しいExcelファイルを作成しました。")  # 完了メッセージを表示
 
-    exit()  # 処理が終了したらプログラムを終了
+    root = Tk()
+    root.protocol("WM_DELETE_WINDOW", root.quit)
+    root.quit()
 
 
 def select_mode():
@@ -114,6 +116,7 @@ def select_mode():
 
     Button(root, text="OK", command=on_select).pack()
 
+    root.protocol("WM_DELETE_WINDOW", root.quit)
     root.mainloop()
 
 
