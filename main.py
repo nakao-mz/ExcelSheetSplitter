@@ -1,8 +1,7 @@
 import tkinter.messagebox
-
 import openpyxl
 from openpyxl import Workbook
-from tkinter import Tk
+from tkinter import Tk, Label, Button, Radiobutton, StringVar
 from tkinter.filedialog import askopenfilename
 import os
 
@@ -18,7 +17,7 @@ def get_excel_file_path():
     return file_path  # 選択されたファイルのパスを返す
 
 
-def create_new_excel_with_sheets():
+def create_new_excel_with_sheets(mode):
     """
     Excelファイルを読み込み、特定のシートの値を基に新しいExcelファイルを作成する関数。
     """
@@ -28,12 +27,6 @@ def create_new_excel_with_sheets():
 
     original_workbook = openpyxl.load_workbook(original_excel_file_path, data_only=True)  # 元のExcelファイルを読み込む（数式ではなく値を取得）
     original_sheet = original_workbook["試験項目"]  # "試験項目"シートを取得
-
-    # ファイル作成モードを選択
-    mode = input("Enter mode (single/multiple): ").strip().lower()
-    while mode not in ["single", "multiple"]:
-        print("Invalid input. Please enter 'single' or 'multiple'.")
-        mode = input("Enter mode (single/multiple): ").strip().lower()
 
     if mode == "single":
         new_workbook = Workbook()  # 新しいExcelブックを作成
@@ -96,5 +89,31 @@ def create_new_excel_with_sheets():
         tkinter.messagebox.showinfo("完了", "新しいExcelファイルを作成しました。")  # 完了メッセージを表示
 
 
+def select_mode():
+    """
+    ファイル作成モードを選択するためのGUIを表示する関数。
+    """
+    def on_select():
+        mode = mode_var.get()
+        if mode in ["single", "multiple"]:
+            root.destroy()
+            create_new_excel_with_sheets(mode)
+        else:
+            tkinter.messagebox.showerror("エラー", "無効なモードが選択されました。")
+
+    root = Tk()
+    root.title("ファイル作成モード選択")
+
+    Label(root, text="ファイル作成モードを選択してください:").pack()
+
+    mode_var = StringVar(value="single")
+    Radiobutton(root, text="Single", variable=mode_var, value="single").pack()
+    Radiobutton(root, text="Multiple", variable=mode_var, value="multiple").pack()
+
+    Button(root, text="OK", command=on_select).pack()
+
+    root.mainloop()
+
+
 if __name__ == "__main__":  # このスクリプトが直接実行された場合のみ以下の処理を実行
-    create_new_excel_with_sheets()  # メインの処理を実行
+    select_mode()  # ファイル作成モード選択のGUIを表示
