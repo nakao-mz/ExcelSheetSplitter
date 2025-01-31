@@ -97,7 +97,7 @@ def select_mode():
     def on_select():
         mode = mode_var.get()
         if mode in ["single", "multiple"]:
-            root.destroy()
+            quit_me(root)
             create_new_excel_with_sheets(mode)
         else:
             tkinter.messagebox.showerror("エラー", "無効なモードが選択されました。")
