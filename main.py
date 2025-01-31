@@ -88,6 +88,8 @@ def create_new_excel_with_sheets(mode):
 
         tkinter.messagebox.showinfo("完了", "新しいExcelファイルを作成しました。")  # 完了メッセージを表示
 
+    exit()  # 処理が終了したらプログラムを終了
+
 
 def select_mode():
     """
