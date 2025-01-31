@@ -88,22 +88,22 @@ def create_new_excel_with_sheets(mode):
 
         tkinter.messagebox.showinfo("完了", "新しいExcelファイルを作成しました。")  # 完了メッセージを表示
 
-    exit()  # 処理が終了したらプログラムを終了
-
 
 def select_mode():
     """
     ファイル作成モードを選択するためのGUIを表示する関数。
     """
+
     def on_select():
         mode = mode_var.get()
         if mode in ["single", "multiple"]:
-            root.destroy()
+            quit_me(root)
             create_new_excel_with_sheets(mode)
         else:
             tkinter.messagebox.showerror("エラー", "無効なモードが選択されました。")
 
     root = Tk()
+    root.protocol("WM_DELETE_WINDOW", lambda: quit_me(root))
     root.title("ファイル作成モード選択")
 
     Label(root, text="ファイル作成モードを選択してください:").pack()
@@ -115,6 +115,11 @@ def select_mode():
     Button(root, text="OK", command=on_select).pack()
 
     root.mainloop()
+
+
+def quit_me(root_window):
+    root_window.quit()
+    root_window.destroy()
 
 
 if __name__ == "__main__":  # このスクリプトが直接実行された場合のみ以下の処理を実行
