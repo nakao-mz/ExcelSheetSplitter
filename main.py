@@ -29,6 +29,7 @@ def create_new_excel_with_sheets():
     original_workbook = openpyxl.load_workbook(original_excel_file_path, data_only=True)  # 元のExcelファイルを読み込む（数式ではなく値を取得）
     original_sheet = original_workbook["試験項目"]  # "試験項目"シートを取得
 
+    # ファイル作成モードを選択
     mode = input("Enter mode (single/multiple): ").strip().lower()
     while mode not in ["single", "multiple"]:
         print("Invalid input. Please enter 'single' or 'multiple'.")
