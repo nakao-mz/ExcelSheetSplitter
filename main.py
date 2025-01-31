@@ -17,6 +17,20 @@ def get_excel_file_path():
     return file_path  # 選択されたファイルのパスを返す
 
 
+def create_evidence_folder(directory_path):
+    """
+    エビデンスフォルダを作成する関数。フォルダが存在しない場合にのみ作成する。
+    """
+    evidence_folder_path = os.path.join(directory_path, "エビデンス")
+    if not os.path.exists(evidence_folder_path):
+        try:
+            os.makedirs(evidence_folder_path)
+        except Exception as e:
+            tkinter.messagebox.showerror("エラー", f"エビデンスフォルダを作成できませんでした。\n{e}")
+            raise
+    return evidence_folder_path
+
+
 def create_new_excel_with_sheets(mode):
     """
     Excelファイルを読み込み、特定のシートの値を基に新しいExcelファイルを作成する関数。
@@ -70,12 +84,13 @@ def create_new_excel_with_sheets(mode):
             test_item_dict[test_item].append(test_number)
 
         original_dir_path = os.path.dirname(original_excel_file_path)
+        evidence_folder_path = create_evidence_folder(original_dir_path)
 
         for test_item, test_numbers in test_item_dict.items():
             start_number = test_numbers[0]
             end_number = test_numbers[-1]
             new_file_name = f"No.{start_number}~{end_number}_エビデンス_{test_item}.xlsx"
-            new_file_path = os.path.join(original_dir_path, new_file_name)
+            new_file_path = os.path.join(evidence_folder_path, new_file_name)
 
             new_workbook = Workbook()
             new_workbook.remove(new_workbook.active)
