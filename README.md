@@ -1,4 +1,4 @@
-#  ExcelSheetSplitter / Excelシートメーカー
+#  ExcelSheetSplitter
 
 このプロジェクトは、Excelファイルを読み込み、特定のシートの値を基に新しいExcelファイルを作成するPythonスクリプトです。
 単体試験時のエビデンス作成などに使用できます。
@@ -47,7 +47,3 @@ python main.py
 
 - `main.py`: メインのスクリプトファイル
 - `.venv/`: 仮想環境のディレクトリ
-
-## ライセンス
-
-このプロジェクトはMITライセンスの下で公開されています。詳細は`LICENSE`ファイルを参照してください。
